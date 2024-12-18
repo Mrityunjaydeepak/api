@@ -1,11 +1,15 @@
 const mongoose = require("mongoose");
 
 const PortfolioSchema = new mongoose.Schema({
-  title: {
+  portfolioName: {
     type: String,
     required: true,
   },
-  headerImage: {
+  headingOne: {
+    type: String,
+    required: true,
+  },
+  headingTwo: {
     type: String,
     required: true, // Compulsory
   },

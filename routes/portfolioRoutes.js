@@ -32,19 +32,28 @@ router.get("/:id", async (req, res) => {
 // @route POST /api/portfolios
 // @desc Create a new portfolio
 router.post("/", async (req, res) => {
-  const { title, headerImage, homePageImage, description, imageGallery } =
-    req.body;
+  const {
+    portfolioName,
+    headingOne,
+    headingTwo,
+    homePageImage,
+    description,
+    imageGallery,
+  } = req.body;
 
-  if (!title || !headerImage || !homePageImage) {
+  if (!portfolioName || !headingOne || !headingTwo || !homePageImage) {
     return res
       .status(400)
-      .json({ msg: "Title, headerImage, and homePageImage are required" });
+      .json({
+        msg: "portfolioName, headingOne, headingTwo, and homePageImage are required",
+      });
   }
 
   try {
     const newPortfolio = new Portfolio({
-      title,
-      headerImage,
+      portfolioName,
+      headingOne,
+      headingTwo,
       homePageImage,
       description,
       imageGallery,
@@ -62,8 +71,9 @@ router.post("/", async (req, res) => {
 // @desc Update portfolio fields (supports partial updates and gallery image updates)
 router.patch("/:id", async (req, res) => {
   const {
-    title,
-    headerImage,
+    portfolioName,
+    headingOne,
+    headingTwo,
     homePageImage,
     description,
     imageGallery,
@@ -79,8 +89,9 @@ router.patch("/:id", async (req, res) => {
     }
 
     // Update general fields if provided
-    if (title) portfolio.title = title;
-    if (headerImage) portfolio.headerImage = headerImage;
+    if (portfolioName) portfolio.portfolioName = portfolioName;
+    if (headingOne) portfolio.headingOne = headingOne;
+    if (headingTwo) portfolio.headingTwo = headingTwo;
     if (homePageImage) portfolio.homePageImage = homePageImage;
     if (description) portfolio.description = description;
 
