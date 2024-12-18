@@ -64,8 +64,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// @route   PUT /api/blogs/:id
-// @desc    Update a blog post by ID
+// @route   PATCH /api/blogs/:id
+// @desc    Update one or multiple fields of a blog post by ID
 router.patch("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -73,25 +73,26 @@ router.patch("/:id", async (req, res) => {
     // Extract the fields to update from the request body
     const updates = req.body;
 
-    // Check that only one field is being updated
-    if (Object.keys(updates).length !== 1) {
-      return res
-        .status(400)
-        .json({ message: "You can only update one field at a time." });
+    // Check if there are no fields to update
+    if (!updates || Object.keys(updates).length === 0) {
+      return res.status(400).json({ message: "No fields provided to update." });
     }
 
     // Find and update the blog post
     const updatedBlogPost = await BlogPost.findByIdAndUpdate(
       id,
-      { $set: updates }, // Apply the updates
-      { new: true, runValidators: true } // Return the updated document
+      { $set: updates }, // Apply updates dynamically
+      { new: true, runValidators: true } // Return updated document and validate updates
     );
 
     if (!updatedBlogPost) {
       return res.status(404).json({ message: "Blog post not found." });
     }
 
-    res.status(200).json(updatedBlogPost);
+    res.status(200).json({
+      message: "Blog post updated successfully.",
+      updatedBlogPost,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
