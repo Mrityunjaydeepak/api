@@ -4,6 +4,7 @@ const cors = require("cors"); // Import cors middleware
 const connectDB = require("./config/db");
 const blogRoutes = require("./routes/blogRoutes");
 const portfolioRoutes = require("./routes/portfolioRoutes");
+const testimonialRoutes = require("./routes/testimonialRoutes");
 const bodyParser = require("body-parser");
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(cors({ origin: "*" })); // Allows requests from any origin
 // Routes
 app.use("/api/blogs", blogRoutes);
 app.use("/api/portfolios", portfolioRoutes);
+app.use("/api/testimonials", testimonialRoutes);
 
 // Root Endpoint
 app.get("/", (req, res) => {
