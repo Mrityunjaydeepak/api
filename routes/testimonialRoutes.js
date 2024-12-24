@@ -32,21 +32,21 @@ router.get("/:id", async (req, res) => {
 // @route POST /api/testimonials
 // @desc Create a new testimonial
 router.post("/", async (req, res) => {
-  const { nameAndDesignation, reviewTitle, review } = req.body;
+  const { name, designation, reviewTitle, review, rating } = req.body;
 
-  if (!nameAndDesignation || !reviewTitle || !review) {
-    return res
-      .status(400)
-      .json({
-        msg: "Name and designation, review title, and review are required",
-      });
+  if (!name || !designation || !reviewTitle || !review || !rating) {
+    return res.status(400).json({
+      msg: "Name, designation, review title, review, and rating are required",
+    });
   }
 
   try {
     const newTestimonial = new Testimonial({
-      nameAndDesignation,
+      name,
+      designation,
       reviewTitle,
       review,
+      rating,
     });
 
     const savedTestimonial = await newTestimonial.save();
@@ -60,7 +60,7 @@ router.post("/", async (req, res) => {
 // @route PATCH /api/testimonials/:id
 // @desc Update testimonial fields (supports partial updates)
 router.patch("/:id", async (req, res) => {
-  const { nameAndDesignation, reviewTitle, review } = req.body;
+  const { name, designation, reviewTitle, review, rating } = req.body;
 
   try {
     let testimonial = await Testimonial.findById(req.params.id);
@@ -70,45 +70,14 @@ router.patch("/:id", async (req, res) => {
     }
 
     // Update fields if provided
-    if (nameAndDesignation) testimonial.nameAndDesignation = nameAndDesignation;
+    if (name) testimonial.name = name;
+    if (designation) testimonial.designation = designation;
     if (reviewTitle) testimonial.reviewTitle = reviewTitle;
     if (review) testimonial.review = review;
+    if (rating) testimonial.rating = rating;
 
     const updatedTestimonial = await testimonial.save();
     res.json(updatedTestimonial);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
-  }
-});
-
-// @route PATCH /api/testimonials
-// @desc Bulk update testimonials
-router.patch("/", async (req, res) => {
-  const { updates } = req.body; // Array of updates [{ id, fieldsToUpdate }, ...]
-
-  if (!Array.isArray(updates)) {
-    return res.status(400).json({ msg: "Updates must be an array" });
-  }
-
-  try {
-    const updatedTestimonials = await Promise.all(
-      updates.map(async (update) => {
-        const testimonial = await Testimonial.findById(update.id);
-        if (!testimonial) {
-          throw new Error(`Testimonial with ID ${update.id} not found`);
-        }
-
-        // Apply updates
-        Object.keys(update.fieldsToUpdate).forEach((key) => {
-          testimonial[key] = update.fieldsToUpdate[key];
-        });
-
-        return testimonial.save();
-      })
-    );
-
-    res.json(updatedTestimonials);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

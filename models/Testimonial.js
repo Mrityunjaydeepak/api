@@ -1,21 +1,31 @@
 const mongoose = require("mongoose");
 
 const TestimonialSchema = new mongoose.Schema({
-  nameAndDesignation: {
+  name: {
     type: String,
-    required: true, // e.g., "John Doe, CEO at ExampleCorp"
+    required: true,
+  },
+  designation: {
+    type: String,
+    required: true,
   },
   reviewTitle: {
     type: String,
-    required: true, // Short title for the review
+    required: true,
   },
   review: {
     type: String,
-    required: true, // Detailed review content
+    required: true,
+  },
+  rating: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5,
   },
   createdAt: {
     type: Date,
-    default: Date.now, // Automatically sets the creation timestamp
+    default: Date.now,
   },
 });
 
