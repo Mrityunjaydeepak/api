@@ -32,7 +32,7 @@ router.get("/:id", async (req, res) => {
 // @route POST /api/testimonials
 // @desc Create a new testimonial
 router.post("/", async (req, res) => {
-  const { name, designation, reviewTitle, review, rating } = req.body;
+  const { name, designation, reviewTitle, review, rating, img } = req.body;
 
   if (!name || !designation || !reviewTitle || !review || !rating) {
     return res.status(400).json({
@@ -47,6 +47,7 @@ router.post("/", async (req, res) => {
       reviewTitle,
       review,
       rating,
+      img, // Include img field here
     });
 
     const savedTestimonial = await newTestimonial.save();
@@ -60,7 +61,7 @@ router.post("/", async (req, res) => {
 // @route PATCH /api/testimonials/:id
 // @desc Update testimonial fields (supports partial updates)
 router.patch("/:id", async (req, res) => {
-  const { name, designation, reviewTitle, review, rating } = req.body;
+  const { name, designation, reviewTitle, review, rating, img } = req.body;
 
   try {
     let testimonial = await Testimonial.findById(req.params.id);
@@ -75,6 +76,7 @@ router.patch("/:id", async (req, res) => {
     if (reviewTitle) testimonial.reviewTitle = reviewTitle;
     if (review) testimonial.review = review;
     if (rating) testimonial.rating = rating;
+    if (img) testimonial.img = img; // Handle img field update
 
     const updatedTestimonial = await testimonial.save();
     res.json(updatedTestimonial);

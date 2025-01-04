@@ -37,6 +37,22 @@ const PortfolioSchema = new mongoose.Schema({
       },
     },
   ],
+  videoGallery: [
+    {
+      heading: {
+        type: String,
+        required: false, // Optional
+      },
+      content: {
+        type: String,
+        required: false, // Optional
+      },
+      videoUrl: {
+        type: String,
+        required: true, // Compulsory
+      },
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,

@@ -39,14 +39,13 @@ router.post("/", async (req, res) => {
     homePageImage,
     description,
     imageGallery,
+    videoGallery,
   } = req.body;
 
   if (!portfolioName || !headingOne || !headingTwo || !homePageImage) {
-    return res
-      .status(400)
-      .json({
-        msg: "portfolioName, headingOne, headingTwo, and homePageImage are required",
-      });
+    return res.status(400).json({
+      msg: "portfolioName, headingOne, headingTwo, and homePageImage are required",
+    });
   }
 
   try {
@@ -57,6 +56,7 @@ router.post("/", async (req, res) => {
       homePageImage,
       description,
       imageGallery,
+      videoGallery, // Include videoGallery field here
     });
 
     const savedPortfolio = await newPortfolio.save();
@@ -68,7 +68,7 @@ router.post("/", async (req, res) => {
 });
 
 // @route PATCH /api/portfolios/:id
-// @desc Update portfolio fields (supports partial updates and gallery image updates)
+// @desc Update portfolio fields (supports partial updates and gallery updates)
 router.patch("/:id", async (req, res) => {
   const {
     portfolioName,
@@ -77,8 +77,11 @@ router.patch("/:id", async (req, res) => {
     homePageImage,
     description,
     imageGallery,
+    videoGallery,
     galleryIndex,
     newImage,
+    videoIndex,
+    newVideo,
   } = req.body;
 
   try {
@@ -98,12 +101,23 @@ router.patch("/:id", async (req, res) => {
     // Update imageGallery if provided
     if (imageGallery) portfolio.imageGallery = imageGallery;
 
-    // Update a specific image in imageGallery if galleryIndex and newImage are provided
+    // Update a specific image in imageGallery
     if (typeof galleryIndex === "number" && newImage) {
       if (galleryIndex < 0 || galleryIndex >= portfolio.imageGallery.length) {
         return res.status(400).json({ msg: "Invalid gallery image index" });
       }
       portfolio.imageGallery[galleryIndex] = newImage;
+    }
+
+    // Update videoGallery if provided
+    if (videoGallery) portfolio.videoGallery = videoGallery;
+
+    // Update a specific video in videoGallery
+    if (typeof videoIndex === "number" && newVideo) {
+      if (videoIndex < 0 || videoIndex >= portfolio.videoGallery.length) {
+        return res.status(400).json({ msg: "Invalid video gallery index" });
+      }
+      portfolio.videoGallery[videoIndex] = newVideo;
     }
 
     const updatedPortfolio = await portfolio.save();

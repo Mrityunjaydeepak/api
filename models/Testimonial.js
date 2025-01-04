@@ -23,6 +23,10 @@ const TestimonialSchema = new mongoose.Schema({
     min: 1,
     max: 5,
   },
+  img: {
+    type: String,
+    required: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
