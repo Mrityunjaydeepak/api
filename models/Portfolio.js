@@ -49,7 +49,7 @@ const PortfolioSchema = new mongoose.Schema({
       },
       videoUrl: {
         type: String,
-        required: true, // Compulsory
+        required: false, // Compulsory
       },
     },
   ],
